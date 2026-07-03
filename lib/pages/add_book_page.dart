@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:intl/intl.dart';
 import '../cubit/book_cubit.dart';
 import '../models/book_model.dart';
 
@@ -30,7 +30,19 @@ class _AddBookPageState
   TextEditingController();
 
   String status = 'Tersedia';
+  Future<void> _selectDate(TextEditingController controller) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
 
+    if (pickedDate != null) {
+      controller.text =
+          DateFormat('dd/MM/yyyy').format(pickedDate);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,24 +94,24 @@ class _AddBookPageState
               const SizedBox(height: 10),
 
               TextField(
-                controller:
-                borrowDateController,
-                decoration:
-                const InputDecoration(
-                  labelText:
-                  'Tanggal Pinjam',
+                controller: borrowDateController,
+                readOnly: true,
+                onTap: () => _selectDate(borrowDateController),
+                decoration: const InputDecoration(
+                  labelText: 'Tanggal Pinjam',
+                  suffixIcon: Icon(Icons.calendar_today),
                 ),
               ),
 
               const SizedBox(height: 10),
 
               TextField(
-                controller:
-                returnDateController,
-                decoration:
-                const InputDecoration(
-                  labelText:
-                  'Tanggal Kembali',
+                controller: returnDateController,
+                readOnly: true,
+                onTap: () => _selectDate(returnDateController),
+                decoration: const InputDecoration(
+                  labelText: 'Tanggal Kembali',
+                  suffixIcon: Icon(Icons.calendar_today),
                 ),
               ),
 
